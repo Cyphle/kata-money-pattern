@@ -3,6 +3,8 @@ package fr.money;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import static fr.money.Currency.EURO;
+
 public class Money {
   public static final MoneyBuilder money = new MoneyBuilder();
   private BigDecimal amount;
@@ -17,8 +19,16 @@ public class Money {
     return amount;
   }
 
+  public BigDecimal getAmountIn(Currency wantedCurrency) {
+    return null;
+  }
+
   public Money add(Money amountToAdd) {
     return money.of(amount.add(amountToAdd.amount)).build();
+  }
+
+  public Money toEuros() {
+    return money.of(amount).in(EURO).build();
   }
 
   @Override
@@ -49,7 +59,7 @@ public class Money {
 
   public static class MoneyBuilder {
     private BigDecimal amount;
-    private Currency currency = Currency.EURO;
+    private Currency currency = EURO;
 
     public MoneyBuilder of(BigDecimal amount) {
       this.amount = amount;
