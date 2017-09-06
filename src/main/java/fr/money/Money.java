@@ -11,6 +11,10 @@ public class Money {
     this.amount = amount;
   }
 
+  public BigDecimal getAmount() {
+    return amount;
+  }
+
   public Money add(Money amountToAdd) {
     return money.of(amount.add(amountToAdd.amount)).build();
   }

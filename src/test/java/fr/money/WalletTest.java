@@ -14,13 +14,6 @@ public class WalletTest {
   }
 
   @Test
-  public void should_have_10_when_adding_10_in_wallet() throws Exception {
-    Wallet wallet = new Wallet();
-    wallet.add(new BigDecimal(10));
-    assertThat(wallet.getAmount()).isEqualTo(new BigDecimal(10));
-  }
-
-  @Test
   public void should_have_10_of_money_when_adding_10_in_wallet() throws Exception {
     Wallet wallet = new Wallet();
     wallet.add(new Money.MoneyBuilder().of(new BigDecimal(10)).build());
