@@ -6,9 +6,11 @@ import java.math.MathContext;
 public class Money {
   public static final MoneyBuilder money = new MoneyBuilder();
   private BigDecimal amount;
+  private Currency currency;
 
-  public Money(BigDecimal amount) {
+  public Money(BigDecimal amount, Currency currency) {
     this.amount = amount;
+    this.currency = currency;
   }
 
   public BigDecimal getAmount() {
@@ -26,23 +28,28 @@ public class Money {
 
     Money money = (Money) o;
 
-    return amount != null ? amount.equals(money.amount) : money.amount == null;
+    if (amount != null ? !amount.equals(money.amount) : money.amount != null) return false;
+    return currency == money.currency;
   }
 
   @Override
   public int hashCode() {
-    return amount != null ? amount.hashCode() : 0;
+    int result = amount != null ? amount.hashCode() : 0;
+    result = 31 * result + (currency != null ? currency.hashCode() : 0);
+    return result;
   }
 
   @Override
   public String toString() {
     return "Money{" +
             "amount=" + amount +
+            ", currency=" + currency +
             '}';
   }
 
   public static class MoneyBuilder {
     private BigDecimal amount;
+    private Currency currency = Currency.EURO;
 
     public MoneyBuilder of(BigDecimal amount) {
       this.amount = amount;
@@ -54,8 +61,13 @@ public class Money {
       return this;
     }
 
+    public MoneyBuilder in(Currency currency) {
+      this.currency = currency;
+      return this;
+    }
+
     public Money build() {
-      return new Money(amount);
+      return new Money(amount, currency);
     }
   }
 }
