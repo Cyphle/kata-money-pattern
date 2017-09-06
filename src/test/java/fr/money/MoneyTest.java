@@ -12,7 +12,7 @@ public class MoneyTest {
   public void should_get_amount_in_euros_when_having_money_in_euros() throws Exception {
     Money currentMoney = money.of(10).in(EURO).build();
 
-    assertThat(currentMoney.toEuros()).isEqualTo(money.of(10).in(EURO).build());
+    assertThat(currentMoney.getAmountIn(EURO)).isEqualTo(money.of(10).in(EURO).build());
   }
 
   @Test

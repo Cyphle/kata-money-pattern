@@ -19,16 +19,12 @@ public class Money {
     return amount;
   }
 
-  public BigDecimal getAmountIn(Currency wantedCurrency) {
-    return null;
+  public Money getAmountIn(Currency wantedCurrency) {
+    return money.of(amount.multiply(wantedCurrency.conversionRate)).in(wantedCurrency).build();
   }
 
   public Money add(Money amountToAdd) {
     return money.of(amount.add(amountToAdd.amount)).build();
-  }
-
-  public Money toEuros() {
-    return money.of(amount).in(EURO).build();
   }
 
   @Override
@@ -38,7 +34,7 @@ public class Money {
 
     Money money = (Money) o;
 
-    if (amount != null ? !amount.equals(money.amount) : money.amount != null) return false;
+    if (amount != null ? !amount.setScale(2).equals(money.amount.setScale(2)) : money.amount != null) return false;
     return currency == money.currency;
   }
 
