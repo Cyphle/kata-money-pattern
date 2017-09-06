@@ -1,4 +1,4 @@
-# Kata Coffee Machine
+# Kata Money Pattern
 
 ## Notice
 I have in my wallet :
