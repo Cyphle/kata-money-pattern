@@ -6,19 +6,19 @@ import java.util.List;
 import static fr.money.Currency.EURO;
 import static fr.money.Money.money;
 
-public class Wallet {
-  private List<Money> moneys;
+class Wallet {
+  private final List<Money> moneys;
 
-  public Wallet() {
+  Wallet() {
     moneys = new ArrayList<>();
   }
 
-  public Money getMoneyAmount() {
+  Money getMoneyAmount() {
     return moneys.stream()
             .reduce(money.of(0).in(EURO).build(), Money::add);
   }
 
-  public void add(Money amountToAdd) {
+  void add(Money amountToAdd) {
     moneys.add(amountToAdd);
   }
 }

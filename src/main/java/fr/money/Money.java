@@ -3,28 +3,23 @@ package fr.money;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import static fr.money.Currency.EURO;
 import static java.math.BigDecimal.ROUND_FLOOR;
 
 public class Money {
-  public static final MoneyBuilder money = new MoneyBuilder();
-  private BigDecimal amount;
-  private Currency currency;
+  static final MoneyBuilder money = new MoneyBuilder();
+  private final BigDecimal amount;
+  private final Currency currency;
 
-  public Money(BigDecimal amount, Currency currency) {
+  private Money(BigDecimal amount, Currency currency) {
     this.amount = amount;
     this.currency = currency;
   }
 
-  public BigDecimal getAmount() {
-    return amount;
-  }
-
-  public Money getAmountIn(Currency wantedCurrency) {
+  Money getAmountIn(Currency wantedCurrency) {
     return money.of(toEuros().divide(wantedCurrency.conversionRate, MathContext.DECIMAL64).setScale(2, ROUND_FLOOR)).in(wantedCurrency).build();
   }
 
-  public Money add(Money amountToAdd) {
+  Money add(Money amountToAdd) {
     BigDecimal totalEuros = toEuros().add(amountToAdd.toEuros(), MathContext.DECIMAL64);
     BigDecimal totalInBaseCurrency = totalEuros.divide(currency.conversionRate, MathContext.DECIMAL64).setScale(2, ROUND_FLOOR);
     return money.of(totalInBaseCurrency).in(currency).build();
@@ -41,7 +36,7 @@ public class Money {
 
     Money money = (Money) o;
 
-    if (amount != null ? !amount.setScale(2).equals(money.amount.setScale(2)) : money.amount != null) return false;
+    if (amount != null ? !amount.setScale(2, ROUND_FLOOR).equals(money.amount.setScale(2, ROUND_FLOOR)) : money.amount != null) return false;
     return currency == money.currency;
   }
 
@@ -60,26 +55,26 @@ public class Money {
             '}';
   }
 
-  public static class MoneyBuilder {
+  static class MoneyBuilder {
     private BigDecimal amount;
     private Currency currency;
 
-    public MoneyBuilder of(BigDecimal amount) {
+    MoneyBuilder of(BigDecimal amount) {
       this.amount = amount;
       return this;
     }
 
-    public MoneyBuilder of(double amount) {
-      this.amount = new BigDecimal(amount, MathContext.DECIMAL64).setScale(2);
+    MoneyBuilder of(double amount) {
+      this.amount = new BigDecimal(amount, MathContext.DECIMAL64).setScale(2, ROUND_FLOOR);
       return this;
     }
 
-    public MoneyBuilder in(Currency currency) {
+    MoneyBuilder in(Currency currency) {
       this.currency = currency;
       return this;
     }
 
-    public Money build() {
+    Money build() {
       return new Money(amount, currency);
     }
   }
