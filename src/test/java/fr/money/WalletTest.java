@@ -12,7 +12,7 @@ public class WalletTest {
   @Test
   public void should_have_0_when_having_wallet() throws Exception {
     Wallet wallet = new Wallet();
-    assertThat(wallet.getAmount()).isEqualTo(new BigDecimal(0));
+    assertThat(wallet.getAmount()).isEqualTo(new BigDecimal(0.00).setScale(2));
   }
 
   @Test

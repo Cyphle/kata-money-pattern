@@ -25,7 +25,13 @@ public class Money {
   }
 
   public Money add(Money amountToAdd) {
-    return money.of(amount.add(amountToAdd.amount)).build();
+    BigDecimal amountInEuros = toEuros();
+    BigDecimal amountToAddInEuros = amountToAdd.toEuros();
+    BigDecimal totalEuros = amountInEuros.add(amountToAddInEuros, MathContext.DECIMAL64);
+    BigDecimal totalInBaseCurrency = totalEuros.divide(currency.conversionRate, MathContext.DECIMAL64).setScale(2, ROUND_FLOOR);
+
+    return money.of(totalInBaseCurrency).in(currency).build();
+//    return money.of(amount.add(amountToAdd.amount)).build();
   }
 
   private BigDecimal toEuros() {
@@ -60,7 +66,7 @@ public class Money {
 
   public static class MoneyBuilder {
     private BigDecimal amount;
-    private Currency currency = EURO;
+    private Currency currency;
 
     public MoneyBuilder of(BigDecimal amount) {
       this.amount = amount;
@@ -68,7 +74,7 @@ public class Money {
     }
 
     public MoneyBuilder of(double amount) {
-      this.amount = new BigDecimal(amount, MathContext.DECIMAL64);
+      this.amount = new BigDecimal(amount, MathContext.DECIMAL64).setScale(2);
       return this;
     }
 
