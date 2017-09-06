@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import static fr.money.Currency.EURO;
+import static java.math.BigDecimal.ROUND_FLOOR;
 
 public class Money {
   public static final MoneyBuilder money = new MoneyBuilder();
@@ -20,11 +21,15 @@ public class Money {
   }
 
   public Money getAmountIn(Currency wantedCurrency) {
-    return money.of(amount.multiply(wantedCurrency.conversionRate)).in(wantedCurrency).build();
+    return money.of(toEuros().divide(wantedCurrency.conversionRate, MathContext.DECIMAL64).setScale(2, ROUND_FLOOR)).in(wantedCurrency).build();
   }
 
   public Money add(Money amountToAdd) {
     return money.of(amount.add(amountToAdd.amount)).build();
+  }
+
+  private BigDecimal toEuros() {
+    return amount.multiply(currency.conversionRate);
   }
 
   @Override
