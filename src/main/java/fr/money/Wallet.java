@@ -1,26 +1,24 @@
 package fr.money;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static fr.money.Currency.EURO;
 import static fr.money.Money.money;
 
 public class Wallet {
-  private Money moneyAmount;
+  private List<Money> moneys;
 
   public Wallet() {
-    moneyAmount = money.of(0).in(EURO).build();
-  }
-
-  public BigDecimal getAmount() {
-    return moneyAmount.getAmount();
+    moneys = new ArrayList<>();
   }
 
   public Money getMoneyAmount() {
-    return moneyAmount;
+    return moneys.stream()
+            .reduce(money.of(0).in(EURO).build(), Money::add);
   }
 
   public void add(Money amountToAdd) {
-    moneyAmount = moneyAmount.add(amountToAdd);
+    moneys.add(amountToAdd);
   }
 }
